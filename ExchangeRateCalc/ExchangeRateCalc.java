@@ -9,9 +9,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-import vo.ScriptData;
+import utils.CustomDeserializer;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import dto.Result;
+import dto.ScriptData;
 
 public class ExchangeRateCalc {
 	public static void main(String[] args) throws IOException {
@@ -21,10 +25,25 @@ public class ExchangeRateCalc {
 		String str = element.data();
 		System.out.println(str);
 		
-		Gson gson = new Gson();
-		ScriptData sd = gson.fromJson(str, ScriptData.class);
-		System.out.println(sd.getCountries());
+		Gson gson = new GsonBuilder()
+						.registerTypeAdapter(Result.class, new CustomDeserializer())
+						.create();
 		
+		ScriptData sd = gson.fromJson(str, ScriptData.class);
+		
+		Map<String, Result> rs = sd.getProps()
+				.getPageProps()
+				.getDehydratedState()
+				.getQueries()
+				.get(1)
+				.getState()
+				.getData()
+				.getResult();
+		
+		rs.forEach((key, value) -> System.out.println(key + " : " + value));
+//		for(Country c : sd.getCountries()) {
+//			System.out.println(c.toString());
+//		}
 //		// Map 출력
 //		for (Map.Entry<String, Object> entry : map.entrySet()) {
 //			System.out.println(entry.getKey() + "=" + entry.getValue());
