@@ -18,4 +18,13 @@ public class Result {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		return "Result [countryName=" + countryName + ", currencyName="
+				+ currencyName + ", calcPrice=" + calcPrice + ", name=" + name
+				+ "]";
+	}
+	
+	
 }

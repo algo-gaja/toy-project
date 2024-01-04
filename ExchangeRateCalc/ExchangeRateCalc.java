@@ -13,6 +13,11 @@ import utils.CustomDeserializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import dto.Result;
 import dto.ScriptData;
@@ -25,22 +30,46 @@ public class ExchangeRateCalc {
 		String str = element.data();
 		System.out.println(str);
 		
-		Gson gson = new GsonBuilder()
-						.registerTypeAdapter(Result.class, new CustomDeserializer())
-						.create();
+		Gson gson = new Gson();
 		
-		ScriptData sd = gson.fromJson(str, ScriptData.class);
+		JsonElement rootElement = gson.fromJson(str, JsonElement.class);
+		JsonObject rootObject = rootElement.getAsJsonObject();
 		
-		Map<String, Result> rs = sd.getProps()
-				.getPageProps()
-				.getDehydratedState()
-				.getQueries()
-				.get(1)
-				.getState()
-				.getData()
-				.getResult();
+		// 먼저 "props" > "pageProps" > "dehydratedState" > "queries"에서 result 배열을 가져옵니다.
+        JsonArray queriesArray = rootObject.getAsJsonObject("props")
+                                            .getAsJsonObject("pageProps")
+                                            .getAsJsonObject("dehydratedState")
+                                            .getAsJsonArray("queries");
+
+        // 여기서는 첫 번째 query의 result를 가져옵니다.
+        JsonObject resultArray = queriesArray.get(1)
+                                           .getAsJsonObject()
+                                           .getAsJsonObject("state")
+                                           .getAsJsonObject("data")
+                                           .getAsJsonObject("result");
+        
+        System.out.println(resultArray);
+        // result 배열의 첫 번째 원소가 배열인지 객체인지 확인합니다.
+        Map<String, Result> rs = gson.fromJson(resultArray, new TypeToken<Map<String, Result>>(){}.getType());
+        
+        rs.forEach((k, v) -> System.out.println(k + " : " + v.toString()));
+//		Gson gson = new GsonBuilder()
+//						.registerTypeAdapter(Result.class, new CustomDeserializer())
+//						.create();
 		
-		rs.forEach((key, value) -> System.out.println(key + " : " + value));
+//		ScriptData sd = gson.fromJson(str, ScriptData.class);
+		
+//		Map<String, Result> rs = sd.getProps()
+//				.getPageProps()
+//				.getDehydratedState()
+//				.getQueries()
+//				.get(1)
+//				.getState()
+//				.getData()
+//				.getResult();
+		
+		
+//		rs.forEach((key, value) -> System.out.println(key + " : " + value));
 //		for(Country c : sd.getCountries()) {
 //			System.out.println(c.toString());
 //		}
