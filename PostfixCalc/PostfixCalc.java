@@ -73,7 +73,6 @@ public class PostfixCalc {
             postfix.append(num).append(" ");
         }
 		
-		System.out.println(postfix.toString());
 		// stack에 있는 연산자
         while(!stack.isEmpty()) {
         	postfix.append(stack.pop()).append(" ");
