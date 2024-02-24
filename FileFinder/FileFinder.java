@@ -35,21 +35,23 @@ public class FileFinder {
 		if(file.isDirectory() && !file.getName().equals("System Volume Information")) {
 			File[] files = file.listFiles();
 			
-			for(File f : files) {
-				if(condition) {
-					if(f.getName().equals(keyword)) {
-						System.out.println(f.getAbsolutePath());
-						count++;
+			if(files != null) {
+				for(File f : files) {
+					if(condition) {
+						if(f.getName().equals(keyword)) {
+							System.out.println(f.getAbsolutePath());
+							count++;
+						}
+					} else {
+						if(f.getName().contains(keyword)) {
+							System.out.println(f.getAbsolutePath());
+							count++;
+						}
 					}
-				} else {
-					if(f.getName().contains(keyword)) {
-						System.out.println(f.getAbsolutePath());
-						count++;
+					
+					if(f.isDirectory()) {
+						scanDir(f.getAbsolutePath(), keyword, condition);
 					}
-				}
-				
-				if(f.isDirectory()) {
-					scanDir(f.getAbsolutePath(), keyword, condition);
 				}
 			}
 		}
