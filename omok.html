@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #table {
+            position: absolute;
+            background-color: blanchedalmond;
+            width: 360px;
+            height: 360px;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        #go {
+            position: absolute;
+            margin: 10px;
+            width: 340px;
+            height: 340px;
+            border-collapse: collapse;
+            z-index: 1;
+        }
+        .square {
+            border: thin solid lightgray;
+            padding: 0;
+        }
+        .dot {
+            position: absolute;
+            width:4px;
+            height: 4px;
+            border-radius: 100%;
+            background-color: black;
+            margin-left:58px;
+            margin-top:58px;
+        }
+
+        .black {
+            background-color: black;
+            border-radius: 100%;
+        }
+        .white {
+            background-color: white;
+            border-radius: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="board">
+        <table id="table"></table>
+        <table id="go"></table>
+    </div>
+    <script>
+        const board = document.getElementById('board');
+        const table = document.getElementById('table');
+        const go = document.getElementById('go');
+        
+        for(var i = 0 ; i < 18 ; i++) {
+            let tr = document.createElement('tr');
+            table.appendChild(tr);
+            for(var j = 0 ; j < 18 ; j++) {
+                let td = document.createElement('td');
+                td.setAttribute('class', 'square');
+                tr.appendChild(td);
+            }
+        }
+        for(var i = 0 ; i < 17 ; i++) {
+            let tr = document.createElement('tr');
+            go.appendChild(tr);
+            for(var j = 0 ; j < 17 ; j++) {
+                let td = document.createElement('td');
+                td.setAttribute('id', i + '-' + j);
+                tr.appendChild(td);
+            }
+        }
+        
+        for(var i = 0 ; i < 3 ; i++) {
+            for(var j = 0 ; j < 3 ; j++) {
+                let dot = document.createElement('div');
+                dot.setAttribute('class', 'dot');
+                let margin_top = 58 + (i * 120);
+                let margin_left = 58 + (j * 120);
+                dot.setAttribute('style', `margin-top: ${margin_top}px; margin-left: ${margin_left}px;`);
+                board.appendChild(dot);
+            }
+        }
+
+        let game = new Array(17);
+        for(let i = 0 ; i < game.length ; i++) {
+            game[i] = new Array(17);
+        }
+
+        let turn = 'B';
+        
+        let tds = document.querySelectorAll('#go td');
+        tds.forEach((item) => {
+            item.addEventListener('click', () => {
+                console.log('item.id : ' + item.id);
+                // 위치 체크
+                let row = Number(item.id.substring(0, item.id.indexOf('-')));
+                let col = Number(item.id.substring(item.id.indexOf('-') + 1));
+                
+                // 돌 놓기
+                if(game[row][col] === undefined) {
+                    game[row][col] = turn;
+                    let myTurn = turn === 'B';
+                    if(myTurn) {
+                        item.setAttribute('class', 'black');
+                    } else {
+                        item.setAttribute('class', 'white');
+                    }
+
+                    // 승리 체크
+                    if (checkWin(row, col, turn)) {
+                        let winner = myTurn ? '흑돌' : '백돌';
+                        // setTimeout(function() {
+                            alert(winner + ' 승!');
+                            location.reload();
+                        // }, 0);
+                        
+                        
+                    }
+                   
+                    if(myTurn) {
+                        turn = 'W';
+                    } else {
+                        turn = 'B';
+                    }
+                }
+
+                function checkWin(row, col, turn) {
+                    const directions = [
+                        [-1,  0], [1,  0], // 상하
+                        [0,  -1], [0,  1], // 좌우
+                        [-1, -1], [1,  1], // 좌상우하 대각선
+                        [-1,  1], [1, -1]  // 우상좌하 대각선
+                    ];
+
+                    for (const [dx, dy] of directions) {
+                        let cnt = 1;
+                        // 특정 방향으로 진행하면서 연속된 돌 개수 세기
+                        for (let i = 1; i < 5; i++) {
+                            const newRow = row + dx * i;
+                            const newCol = col + dy * i;
+
+                            if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
+                                break;
+                            }
+                            cnt++;
+                        }
+                        // 반대 방향으로 진행하면서 연속된 돌 개수 세기
+                        for (let i = 1; i < 5; i++) {
+                            const newRow = row - dx * i;
+                            const newCol = col - dy * i;
+
+                            if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
+                                break;
+                            }
+                            cnt++;
+                        }
+
+                        // 5개 이상일 경우 승리
+                        if (cnt >= 5) {
+                            console.log('끝');
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+            })
+        })
+
+     </script>
+</body>
+</html>
