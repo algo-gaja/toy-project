@@ -2,8 +2,9 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta property="og:image" content="./images/omok.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>오목</title>
     <style>
         #table {
             position: absolute;
@@ -113,10 +114,10 @@
                     // 승리 체크
                     if (checkWin(row, col, turn)) {
                         let winner = myTurn ? '흑돌' : '백돌';
-                        // setTimeout(function() {
+                        setTimeout(function() {
                             alert(winner + ' 승!');
                             location.reload();
-                        // }, 0);
+                        }, 0);
                         
                         
                     }
