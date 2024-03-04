@@ -1,6 +1,30 @@
 package vo;
 
 public class Country {
-	public String name;
-	public String fluctuations;
+	private String countryName;
+	private String currencyName;
+	private String calcPrice;
+	private String name;
+	
+	public String getCountryName() {
+		return countryName;
+	}
+	public String getCurrencyName() {
+		return currencyName;
+	}
+	public String getCalcPrice() {
+		return calcPrice;
+	}
+	public String getName() {
+		return name;
+	}
+	
+	@Override
+	public String toString() {
+		return "Result [countryName=" + countryName + ", currencyName="
+				+ currencyName + ", calcPrice=" + calcPrice + ", name=" + name
+				+ "]";
+	}
+	
+	
 }
