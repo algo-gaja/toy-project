@@ -3,7 +3,7 @@ package vo;
 public class Country {
 	private String countryName;
 	private String currencyName;
-	private String calcPrice;
+	private float calcPrice;
 	private String name;
 	
 	public String getCountryName() {
@@ -12,7 +12,7 @@ public class Country {
 	public String getCurrencyName() {
 		return currencyName;
 	}
-	public String getCalcPrice() {
+	public float getCalcPrice() {
 		return calcPrice;
 	}
 	public String getName() {
