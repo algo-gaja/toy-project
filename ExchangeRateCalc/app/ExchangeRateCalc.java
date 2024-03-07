@@ -28,18 +28,18 @@ public class ExchangeRateCalc {
         calc.init();
         calc.listCountries();
         try {
-        	System.out.print("금액 > ");
-        	int money = Integer.parseInt(sc.nextLine());
-
         	System.out.print("나라 > ");
-            String countryName = sc.nextLine();
-            
+        	String countryName = sc.nextLine();
+        	
         	calc.findBy(countryName.toUpperCase());
         	
         	if(country != null) {
-        		System.out.println(country.getName() + " -> " + (money / country.getCalcPrice()) + " " + country.getCurrencyName());
+        		System.out.print("금액 > ");
+        		int money = Integer.parseInt(sc.nextLine());
+        		
+        		System.out.printf("%s -> %.2f %s", country.getName(), money / country.getCalcPrice(), country.getCurrencyName());
         	} else {
-        		System.err.println("존재하지 않는 국가코드입니다. > " + countryName);
+        		System.err.printf("존재하지 않는 국가코드입니다.");
         	}
 		} catch (NumberFormatException e) {
 			System.err.println("숫자만 입력해주세요.");
@@ -54,7 +54,6 @@ public class ExchangeRateCalc {
         Document doc = conn.get();
         Element element = doc.selectFirst("#__NEXT_DATA__");
         String str = element.data();
-        System.out.println(str);
         
         Gson gson = new Gson();
         
