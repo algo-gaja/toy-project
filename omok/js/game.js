@@ -33,45 +33,44 @@ tds.forEach((item) => {
             
             turn = myTurn ? 'W' : 'B';
         }
-
-        function checkWin(row, col, turn) {
-            const directions = [
-                [-1,  0], [1,  0], // 상하
-                [0,  -1], [0,  1], // 좌우
-                [-1, -1], [1,  1], // 좌상우하 대각선
-                [-1,  1], [1, -1]  // 우상좌하 대각선
-            ];
-
-            for (const [dx, dy] of directions) {
-                let cnt = 1;
-                // 특정 방향으로 진행하면서 연속된 돌 개수 세기
-                for (let i = 1; i < 5; i++) {
-                    const newRow = row + dx * i;
-                    const newCol = col + dy * i;
-
-                    if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
-                        break;
-                    }
-                    cnt++;
-                }
-                // 반대 방향으로 진행하면서 연속된 돌 개수 세기
-                for (let i = 1; i < 5; i++) {
-                    const newRow = row - dx * i;
-                    const newCol = col - dy * i;
-
-                    if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
-                        break;
-                    }
-                    cnt++;
-                }
-
-                // 5개 이상일 경우 승리
-                if (cnt >= 5) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     })
 })
+
+function checkWin(row, col, turn) {
+    const directions = [
+        [-1,  0], [1,  0], // 상하
+        [0,  -1], [0,  1], // 좌우
+        [-1, -1], [1,  1], // 좌상우하 대각선
+        [-1,  1], [1, -1]  // 우상좌하 대각선
+    ];
+
+    for (const [dx, dy] of directions) {
+        let cnt = 1;
+        // 특정 방향으로 진행하면서 연속된 돌 개수 세기
+        for (let i = 1; i < 5; i++) {
+            const newRow = row + dx * i;
+            const newCol = col + dy * i;
+
+            if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
+                break;
+            }
+            cnt++;
+        }
+        // 반대 방향으로 진행하면서 연속된 돌 개수 세기
+        for (let i = 1; i < 5; i++) {
+            const newRow = row - dx * i;
+            const newCol = col - dy * i;
+
+            if (newRow < 0 || newRow > 16 || newCol < 0 || newCol > 16 || game[newRow][newCol] !== turn) {
+                break;
+            }
+            cnt++;
+        }
+
+        // 5개 이상일 경우 승리
+        if (cnt >= 5) {
+            return true;
+        }
+    }
+    return false;
+}
